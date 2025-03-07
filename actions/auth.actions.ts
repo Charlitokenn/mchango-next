@@ -22,7 +22,7 @@ export const loginAction = async (formData: FormData) => {
   }
 
   revalidatePath('/home', 'layout')
-  redirect('/')
+  redirect('/home')
 }
 
 export const signupAction = async (formData: FormData) => {
