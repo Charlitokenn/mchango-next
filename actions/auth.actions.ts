@@ -7,7 +7,7 @@ import { createClient } from '@/utils/supabase/server'
 
 export const loginAction = async (formData: FormData) => {
   const supabase = await createClient()
-
+  
   // type-casting here for convenience
   // in practice, you should validate your inputs
   const data = {
