@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Heart, Mail, Check } from 'lucide-react';
+import Image from 'next/image';
 
 const CallToAction = () => {
   return (
@@ -59,7 +60,7 @@ const CallToAction = () => {
                 
                 <div className="relative">
                   <div className="aspect-square max-w-sm mx-auto rounded-2xl overflow-hidden border-8 border-white shadow-xl">
-                    <img 
+                    <Image 
                       src="/placeholder.svg" 
                       alt="MchangoApp in action" 
                       className="w-full h-full object-cover"

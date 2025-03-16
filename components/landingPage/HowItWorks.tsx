@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 const HowItWorks = () => {
@@ -93,7 +94,7 @@ const HowItWorks = () => {
                   style={{ zIndex: activeStep === index ? 10 : 0 }}
                 >
                   <div className="bg-gradient-to-br from-brand-500 to-brand-700 p-1">
-                    <img 
+                    <Image 
                       src={step.image} 
                       alt={step.title} 
                       className="w-full rounded-xl bg-white"
