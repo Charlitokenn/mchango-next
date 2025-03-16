@@ -1,6 +1,7 @@
 import AuthForm from "@/components/authForm"
 
 const SignUp = async () => {
+  'use client'
   const sendMessage = async () => {
     try {
         const response = await fetch('/api/sendMessage', {
