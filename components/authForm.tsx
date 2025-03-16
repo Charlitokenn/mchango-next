@@ -45,7 +45,7 @@ const AuthForm = ({ type }: { type: string }) => {
           //   firstName: data.firstName!,
           //   lastName: data.lastName!,
           //   mobile: data.mobile!,
-          //   email: data.email,
+          //   email: data.email!,
           //   password: data.password
           // }
 
