@@ -7,7 +7,7 @@ export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
   // Exclude localhost:3000/ from the authentication check
-  if (hostname === 'localhost:3000' && pathname === '/') {
+  if (hostname === 'https://mchango-next.vercel.app' && pathname === '/') {
     return NextResponse.next() // Allow access without authentication
   }
 
