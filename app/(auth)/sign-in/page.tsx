@@ -1,19 +1,11 @@
-"use client";
+import AuthForm from "@/components/authForm"
 
-import { signInSchema } from "@/lib/validations";
-import AuthForm from "@/components/authForm";
-import { loginAction } from "@/actions/auth.actions";
+const SignUp = async () => {
+  return (
+    <section className="flex-center size-full max-sm:px-6">
+      <AuthForm type="sign-in" />
+    </section>
+  )
+}
 
-const Page = () => (
-  <AuthForm
-    type="SIGN_IN"
-    schema={signInSchema}
-    defaultValues={{
-      email: "",
-      password: "",
-    }}
-    onSubmit={loginAction}
-  />
-);
-
-export default Page;
+export default SignUp

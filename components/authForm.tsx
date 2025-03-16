@@ -1,121 +1,157 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  DefaultValues,
-  FieldValues,
-  Path,
-  SubmitHandler,
-  useForm,
-  UseFormReturn,
-} from "react-hook-form";
-import { ZodType } from "zod";
+import Image from 'next/image'
+import Link from 'next/link'
+import React, { useState } from 'react'
 
-import { Button } from "@/components/ui/button";
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { Button } from "@/components/ui/button"
 import {
   Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import Link from "next/link";
+} from "@/components/ui/form"
 
-import { toast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
-import { FIELD_NAMES } from "@/constants";
+import { authFormSchema } from '@/lib/utils';
+import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import CustomInput from './CustomInput';
+import { loginAction, signupAction } from '@/actions/auth.actions';
 
-interface Props<T extends FieldValues> {
-  schema: ZodType<T>;
-  defaultValues: T;
-  onSubmit: (data: T) => Promise<{ success: boolean; error?: string }>;
-  type: "SIGN_IN" | "SIGN_UP";
-}
 
-const AuthForm = <T extends FieldValues>({
-  type,
-  schema,
-  defaultValues,
-  onSubmit,
-}: Props<T>) => {
+const AuthForm = ({ type }: { type: string }) => {
   const router = useRouter();
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const isSignIn = type === "SIGN_IN";
+  const formSchema = authFormSchema(type);
 
-  const form: UseFormReturn<T> = useForm({
-    resolver: zodResolver(schema),
-    defaultValues: defaultValues as DefaultValues<T>,
-  });
+    // 1. Define your form.
+    const form = useForm<z.infer<typeof formSchema>>({
+      resolver: zodResolver(formSchema),
+      defaultValues: {
+        email: "",
+        password: ''
+      },
+    })
+   
+    // 2. Define a submit handler.
+    const onSubmit = async (data: z.infer<typeof formSchema>) => {
+      setIsLoading(true);
 
-  const handleSubmit: SubmitHandler<T> = async (data) => {
-    const result = await onSubmit(data);
+      try {
+        // Sign up with Appwrite & create plaid token
+        
+        if(type === 'sign-up') {
+          const userData = {
+            firstName: data.firstName!,
+            lastName: data.lastName!,
+            mobile: data.mobile!,
+            email: data.email,
+            password: data.password
+          }
 
-    if (result.success) {
-      toast({
-        title: "Success",
-        description: isSignIn
-          ? "You have successfully signed in."
-          : "You have successfully signed up.",
-      });
+          const newUser = await signupAction(userData);
 
-      router.push("/");
-    } else {
-      toast({
-        title: `Error ${isSignIn ? "signing in" : "signing up"}`,
-        description: result.error ?? "An error occurred.",
-        variant: "destructive",
-      });
+          setUser(newUser);
+        }
+
+        if(type === 'sign-in') {
+          const response = await loginAction({
+            email: data.email,
+            password: data.password,
+          })
+
+          if(response) router.push('/')
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
     }
-  };
 
   return (
-    <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-semibold text-white">
-        {isSignIn ? "Welcome back to BookWise" : "Create your library account"}
-      </h1>
-      <p className="text-light-100">
-        {isSignIn
-          ? "Access the vast collection of resources, and stay updated"
-          : "Please complete all fields and upload a valid university ID to gain access to the library"}
-      </p>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(handleSubmit)}
-          className="w-full space-y-6"
-        >
-          {Object.keys(defaultValues).map((field) => (
-            <FormField
-              key={field}
-              control={form.control}
-              name={field as Path<T>}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="capitalize">
-                    {FIELD_NAMES[field.name as keyof typeof FIELD_NAMES]}
-                  </FormLabel>
-                  <FormMessage />
-                </FormItem>
-              )}
+    <section className="flex min-h-screen w-full max-w-[420px] flex-col justify-center gap-5 py-10 md:gap-8;">
+      <header className='flex flex-col gap-5 md:gap-8'>
+          <Link href="/" className="cursor-pointer flex items-center gap-1">
+            <Image 
+              src="/logo.png"
+              width={78}
+              height={54}
+              alt="Mchango logo"
             />
-          ))}
+            <h1 className="text-26 font-ibm-plex-serif font-bold text-black-1"></h1>
+          </Link>
 
-          <Button type="submit" className="form-btn">
-            {isSignIn ? "Sign In" : "Sign Up"}
-          </Button>
-        </form>
-      </Form>
+          <div className="flex flex-col gap-1 md:gap-3">
+            <h1 className="text-24 lg:text-36 font-semibold text-gray-900">
+              {user 
+                ? 'Link Account'
+                : type === 'sign-in'
+                  ? 'Sign In'
+                  : 'Sign Up'
+              }
+              <p className="text-16 font-normal text-gray-600">
+                {user 
+                  ? 'Link your account to get started'
+                  : 'Please enter your details'
+                }
+              </p>  
+            </h1>
+          </div>
+      </header>
+      {user ? (
+        <div className="flex flex-col gap-4">
+          {/* <PlaidLink user={user} variant="primary" /> */}
+        </div>
+      ): (
+        <>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              {type === 'sign-up' && (
+                <>
+                  <div className="flex gap-4">
+                    <CustomInput control={form.control} name='firstName' label="First Name" placeholder='Enter your first name' />
+                    <CustomInput control={form.control} name='lastName' label="Last Name" placeholder='Enter your first name' />
+                  </div>
+                  <CustomInput control={form.control} name='code' label="Mobile Number" placeholder='Enter your Mobile' />
+                  <CustomInput control={form.control} name='mobile' label="Country Code" placeholder='Select Country Code' />
+                </>
+              )}
 
-      <p className="text-center text-base font-medium">
-        {isSignIn ? "New to BookWise? " : "Already have an account? "}
+              <CustomInput control={form.control} name='email' label="Email" placeholder='Enter your email' />
 
-        <Link
-          href={isSignIn ? "/sign-up" : "/sign-in"}
-          className="font-bold text-primary"
-        >
-          {isSignIn ? "Create an account" : "Sign in"}
-        </Link>
-      </p>
-    </div>
-  );
-};
-export default AuthForm;
+              <CustomInput control={form.control} name='password' label="Password" placeholder='Enter your password' />
+
+              <div className="flex flex-col gap-4">
+                <Button type="submit" disabled={isLoading} className="form-btn">
+                  {isLoading ? (
+                    <>
+                      <Loader2 size={20} className="animate-spin" /> &nbsp;
+                      Loading...
+                    </>
+                  ) : type === 'sign-in' 
+                    ? 'Sign In' : 'Sign Up'}
+                </Button>
+              </div>
+            </form>
+          </Form>
+
+          <footer className="flex justify-center gap-1">
+            <p className="text-14 font-normal text-gray-600">
+              {type === 'sign-in'
+              ? "Don't have an account?"
+              : "Already have an account?"}
+            </p>
+            <Link href={type === 'sign-in' ? '/sign-up' : '/sign-in'} className="form-link">
+              {type === 'sign-in' ? 'Sign up' : 'Sign in'}
+            </Link>
+          </footer>
+        </>
+      )}
+    </section>
+  )
+}
+
+export default AuthForm
