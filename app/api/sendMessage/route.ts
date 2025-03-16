@@ -34,7 +34,7 @@ export async function POST(request: Request) {
         }
         console.log(data)
         return NextResponse.json(data, { status: 200 });
-    } catch (error: any) {
-        return NextResponse.json({ message: 'Failed to send message', error: error.message }, { status: 500 });
+    } catch (error: unknown) {
+        return NextResponse.json({ message: 'Failed to send message', error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 });
     }
 }
