@@ -64,6 +64,8 @@ const CallToAction = () => {
                       src="/placeholder.svg" 
                       alt="MchangoApp in action" 
                       className="w-full h-full object-cover"
+                      width={100}
+                      height={100}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent flex items-end">
                       <div className="p-6 text-white">

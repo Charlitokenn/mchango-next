@@ -1,11 +1,11 @@
-import AuthForm from "@/components/authForm"
+import { LoginForm } from "@/components/signin-form"
 
-const SignUp = async () => {
+export default function LoginPage() {
   return (
-    <section className="flex-center size-full max-sm:px-6">
-      <AuthForm type="sign-in" />
-    </section>
+    <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
+      <div className="w-full max-w-sm md:max-w-3xl">
+        <LoginForm />
+      </div>
+    </div>
   )
 }
-
-export default SignUp

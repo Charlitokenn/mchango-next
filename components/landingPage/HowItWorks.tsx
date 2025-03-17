@@ -99,6 +99,8 @@ const HowItWorks = () => {
                       alt={step.title} 
                       className="w-full rounded-xl bg-white"
                       style={{ height: '320px', objectFit: 'cover' }}
+                      width={100}
+                      height={100}
                     />
                   </div>
                   <div className="absolute bottom-4 left-4 right-4 bg-white bg-opacity-90 backdrop-blur-sm rounded-lg p-4">

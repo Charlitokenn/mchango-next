@@ -5,17 +5,10 @@ import { redirect } from 'next/navigation'
 
 import { createClient } from '@/utils/supabase/server'
 
-export const loginAction = async (formData: FormData) => {
+export const signInUser = async (values: SignInParams) => {
   const supabase = await createClient()
-  
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-  }
 
-  const { error } = await supabase.auth.signInWithPassword(data)
+  const { error } = await supabase.auth.signInWithPassword(values)
 
   if (error) {
     redirect('/error')
@@ -25,22 +18,43 @@ export const loginAction = async (formData: FormData) => {
   redirect('/home')
 }
 
-export const signupAction = async (formData: FormData) => {
+export const signUpUser = async (values: SignUpParams) => {
   const supabase = await createClient()
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-  }
+  // Transform the values object to include options and register user with meta data
+  const transformedValues = {
+    email: values.email,
+    password: values.password,
+    options: {
+      data: {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        countryCode: values.countryCode,
+        mobileNumber: values.mobileNumber,
+      },
+    },
+  };
 
-  const { error } = await supabase.auth.signUp(data)
+  const { error } = await supabase.auth.signUp(transformedValues)
 
   if (error) {
     redirect('/error')
   }
 
-  revalidatePath('/', 'layout')
-  redirect('/')
+  revalidatePath('/home', 'layout')
+  redirect('/home')
 }
+
+export const signOutUser = async () => {
+  const supabase = await createClient()
+
+  const { error } = await supabase.auth.signOut()
+
+  if (error) {
+    redirect('/error')
+  }
+
+  revalidatePath('/sign-in', 'layout')
+  redirect('/sign-in')  
+}
+

@@ -61,9 +61,9 @@ const Header = () => {
         </nav>
 
         <div className="hidden md:flex items-center space-x-4">
-          <Button variant="outline" className="rounded-lg px-5 border-brand-400 text-brand-600 hover:bg-brand-50" >
-            <Link href="/sign-in">Login</Link>
-          </Button>
+          <Link href="/sign-in" className="rounded-lg px-5 border-brand-400 text-brand-600 hover:bg-brand-50">
+            Login
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
