@@ -12,31 +12,26 @@ export const navigationLinks = [
     },
   ];
   
-  export const adminSideBarLinks = [
+  export const sideBarLinks = [
     {
       img: "/icons/admin/home.svg",
-      route: "/admin",
+      route: "/home",
       text: "Home",
     },
     {
       img: "/icons/admin/users.svg",
-      route: "/admin/users",
-      text: "All Users",
+      route: "/sms",
+      text: "SMS",
     },
     {
       img: "/icons/admin/book.svg",
-      route: "/admin/books",
-      text: "All Books",
+      route: "reports",
+      text: "Reports",
     },
     {
       img: "/icons/admin/bookmark.svg",
-      route: "/admin/book-requests",
-      text: "Borrow Requests",
-    },
-    {
-      img: "/icons/admin/user.svg",
-      route: "/admin/account-requests",
-      text: "Account Requests",
+      route: "/events",
+      text: "Events",
     },
   ];
   
