@@ -1,9 +1,17 @@
-export default async function Layout({
+import NavBar from "@/components/header";
+import Image from "next/image";
+
+export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <div className="max-w-7xl flex flex-col gap-12 items-start">{children}</div>
+    <main className="">
+      <NavBar />
+      <section className="auth-layout">
+        {children}
+      </section>      
+    </main>
   );
 }

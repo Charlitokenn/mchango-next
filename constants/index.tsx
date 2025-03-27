@@ -1,5 +1,28 @@
 import { KEFlag, TZFlag, UGFlag } from "../components";
 
+export const sidebarItems = [
+  {
+    label: "Dashboard",
+    icon: "home",
+    href: "/protected",
+  },
+  {
+    label: "Events",
+    icon: "calendar",
+    href: "/protected/events",
+  },
+  {
+    label: "SMS",
+    icon: "message-square",
+    href: "/protected/sms",
+  },
+  {
+    label: "Reports",
+    icon: "settings",
+    href: "/protected/reports",
+  },
+]
+
 export const countryCodes = [
   {
     label: "+255 Tanzania",
