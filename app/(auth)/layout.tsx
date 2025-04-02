@@ -1,12 +1,9 @@
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+import { ReactNode } from 'react'
+
+const AuthLayout = ({children}: {children: ReactNode}) => {
   return (
-    <main >
-      {children}
-    </main>
-  );
+    <div className='auth-layout'>{children}</div>
+  )
 }
 
+export default AuthLayout
