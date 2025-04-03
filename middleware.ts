@@ -1,8 +1,8 @@
 import { updateSession } from '@/utils/supabase/middleware'
-import { NextRequest, NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 
 export async function middleware(request: NextRequest) {
-  // Get the hostname and pathname from the request
+  //Get the hostname and pathname from the request
   const hostname = request.headers.get('host')
   const pathname = request.nextUrl.pathname
 

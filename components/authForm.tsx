@@ -11,8 +11,10 @@ import {toast} from "sonner"
 import FormField from "@/components/FormField"
 import CustomSelect from "./customSelect"
 import { countryCodes } from "@/constants"
-import { signInUser } from "@/actions/auth.actions"
+import { signInUser, signUpUser } from "@/actions/auth.actions"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
+
 
 
 const authFormSchema = (type: FormType) => {
@@ -26,12 +28,12 @@ const authFormSchema = (type: FormType) => {
   // .regex(/[\W_]/, "Password must contain at least one special character");
 
   return z.object({
-    firstname: type === 'sign-up' ? z.string().min(3) : z.string().optional(),
-    lastname: type === 'sign-up' ? z.string().min(3) : z.string().optional(),
+    firstName: type === 'sign-up' ? z.string().min(3) : z.string().optional(),
+    lastName: type === 'sign-up' ? z.string().min(3) : z.string().optional(),
     code: type === 'sign-up' ? z.string().min(4).max(4) : z.string().optional(),
     mobile: type === 'sign-up' ? mobileSchema : z.string().optional(),
     email: z.string().email(),
-    password: passwordSchema
+    password: type !== 'forgot-password' ? passwordSchema : z.string().optional(),
   })
 }
 
@@ -43,8 +45,8 @@ const AuthForm = ({ type }: { type: FormType }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstname: "",
-      lastname: "",
+      firstName: "",
+      lastName: "",
       code: "",
       mobile: "",
       email: "",
@@ -56,7 +58,19 @@ const AuthForm = ({ type }: { type: FormType }) => {
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       if (type === 'sign-up') {
-        toast.success('Account Created Successfully')
+        const response = await signUpUser(values)
+
+        if(response?.error) {
+          toast.error(response.message, { description: `Failed to create account. Please try again.` })
+          return
+        } else {
+          const firstName = response.data?.[0]?.firstName || "User"
+
+          toast.success("Account Created", { 
+            description: `👋 Welcome aboard ${firstName}`,
+          })
+        }
+                
         router.push('/sign-in')
         console.log('SIGN UP',values)
       } else {
@@ -72,15 +86,14 @@ const AuthForm = ({ type }: { type: FormType }) => {
           })
           return
         } else {
-          const email = response.data?.user.email
-          const firstname = response.data?.user.user_metadata.firstName
-
-          toast.success("Login Successfull", { 
-            description: `Welcome back ${!firstname ? email : firstname}`,
+          const userName = response?.data?.firstName
+         
+          toast.success("Login Successful", { 
+            description: `Welcome back, ${userName}`,
           })
           router.push('/home')
         }
-      }
+      }    
     } catch (error) {
       console.log(error)
       toast("Couldn't Login", {
@@ -94,21 +107,22 @@ const AuthForm = ({ type }: { type: FormType }) => {
   }
 
   const isSignIn = type === 'sign-in'
+  const isForgotPassword = type === 'forgot-password'
 
   return (
-    <div className="lg:min-w-[566px]">
-
+    <div className="lg:min-w-[487x]">
       <div className="flex flex-col gap-6 card py-8 px-10 border rounded-lg">
-        <div className="flex justify-center space-x-1">
-          <h1 className="text-blueberry text-center text-2xl">Mchango App</h1>
-        </div>        
+        <div className="flex justify-center gap-2 mb-4">
+        <Image src="./logo.svg" alt="logo" width={45} height={45}/>
+        <span style={{ fontFamily: "'Blueberry', sans-serif", fontSize: "2rem", color: '#f49f1c' }}>Mchango App</span>
+      </div>             
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="w-full space-y-6 mt-4 form">
               {!isSignIn && (
                 <div className="flex flex-col space-y-6">
                   <div className="flex justify-between space-x-2">                
-                    <FormField control={form.control} name='firstname' label='First Name' placeholder="First Name"/>
-                    <FormField control={form.control} name='lastname' label='Last Name' placeholder="Last Name"/>
+                    <FormField control={form.control} name='firstName' label='First Name' placeholder="First Name"/>
+                    <FormField control={form.control} name='lastName' label='Last Name' placeholder="Last Name"/>
                   </div>
                   <div className="flex -space-x-0.5">
                     <CustomSelect 
@@ -125,8 +139,10 @@ const AuthForm = ({ type }: { type: FormType }) => {
                 )
               }
                 <FormField control={form.control} type="email" name='email' label='Email' placeholder="Email Address"/>
-                <FormField control={form.control} type="password" name='password' label='Password' placeholder="Enter Password"/>
-            <Button type="submit" className="btn w-full">{isSignIn ? 'Sign In' : 'Create an Account'}</Button>
+                {!isForgotPassword && <FormField control={form.control} type="password" name='password' label='Password' placeholder="Enter Password"/>}
+            <Button type="submit" className="btn w-full">
+              {isSignIn ? 'Sign In' : isForgotPassword ? 'Reset Password' : 'Create an Account'}
+            </Button>
           </form>
         </Form>
         <p className="text-center -mt-3 text-sm">

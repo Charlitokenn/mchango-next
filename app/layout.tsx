@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: "Mchango App",
   description: "Events Bulk SMS Solution",
   icons: {
-    icon: '/icons/logo.svg'
+    icon: '/logo.svg'
   }
 };
 

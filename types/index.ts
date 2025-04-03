@@ -236,5 +236,5 @@
 //         is_anonymous: boolean;
 //   }
 
-type FormType = "sign-in" | "sign-up";
+type FormType = "sign-in" | "sign-up" | "forgot-password" | "reset-password";
   
