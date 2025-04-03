@@ -35,15 +35,21 @@ export const navigationLinks = [
     },
   ];
   
-  export const FIELD_NAMES = {
-    // fullName: "Full name",
-    email: "Email",
-    password: "Password",
-  };
-  
-  export const FIELD_TYPES = {
-    // fullName: "text",
-    email: "email",
-    password: "password",
-  };
+  export const countryCodes = [
+    {
+      label: "Tanzania",
+      value: "+255",
+      icon: "/TZFlag.svg",
+    },
+    {
+      label: "Kenya",
+      value: "+254",
+      icon: "/KEFlag.svg",
+    },
+    {
+      label: "Uganda",
+      value: "+256",
+      icon: "/UGFlag.svg",
+    },
+  ];
   

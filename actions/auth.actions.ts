@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { toast } from "sonner"
 
 import { createClient } from '@/utils/supabase/server'
 
@@ -29,8 +30,8 @@ export const signUpUser = async (values: SignUpParams) => {
       data: {
         firstName: values.firstName,
         lastName: values.lastName,
-        countryCode: values.countryCode,
-        mobileNumber: values.mobileNumber,
+        countryCode: values.code,
+        mobileNumber: values.mobile,
       },
     },
   };

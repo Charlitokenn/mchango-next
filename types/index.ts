@@ -7,19 +7,19 @@
   
 //   // ========================================
   
-//   declare type SignInParams = {
-//     email: string;
-//     password: string;
-//   };
+  declare type SignInParams = {
+    email: string;
+    password: string;
+  };
 
-//   declare type SignUpParams = {
-//     firstName: string;
-//     lastName: string;
-//     countryCode: string;
-//     mobileNumber: string;
-//     email: string;
-//     password: string;
-//   };  
+  declare type SignUpParams = {
+    firstName: string;
+    lastName: string;
+    code: string;
+    mobile: string;
+    email: string;
+    password: string;
+  };  
   
 //   declare type LoginUser = {
 //     email: string;
