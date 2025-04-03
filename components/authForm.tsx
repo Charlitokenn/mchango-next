@@ -14,6 +14,7 @@ import { countryCodes } from "@/constants"
 import { signInUser, signUpUser } from "@/app/actions/auth.actions"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
+import Logo from "./logo"
 
 
 
@@ -111,11 +112,8 @@ const AuthForm = ({ type }: { type: FormType }) => {
 
   return (
     <div className="lg:min-w-[487x]">
-      <div className="flex flex-col gap-6 card py-8 px-10 border rounded-lg">
-        <div className="flex justify-center gap-2 mb-4">
-        <Image src="./logo.svg" alt="logo" width={45} height={45}/>
-        <span style={{ fontFamily: "'Blueberry', sans-serif", fontSize: "2rem", color: '#f49f1c' }}>Mchango App</span>
-      </div>             
+      <div className="flex flex-col gap-6 card py-8 px-10 border rounded-lg !bg-white shadow-sm">
+        <Logo />           
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="w-full space-y-6 mt-4 form">
               {!isSignIn && (
@@ -133,7 +131,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
                       placeholder="Select Country"
                       options={countryCodes}
                     />
-                    <FormField classname="rounded-l mt-3.5" control={form.control} name='mobile' label='' placeholder="e.g 0712555888"/>
+                    <FormField classname="rounded-l mt-3.5 min-w-[230px]" control={form.control} name='mobile' label='' placeholder="e.g 0712555888"/>
                   </div>                  
                   </div>             
                 )

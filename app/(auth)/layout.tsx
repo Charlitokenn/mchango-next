@@ -4,7 +4,7 @@ import { ReactNode } from 'react'
 
 const AuthLayout = ({children}: {children: ReactNode}) => {
   return (
-    <div className='auth-layout'>
+    <div className="auth-layout bg-[url(/smsBack.svg)] bg-center bg-repeat-round">
       <Link href='/' className='absolute top-0 left-0 flex items-center p-2 m-4 space-x-1'>
       <ArrowLeft/>
       <p className='text-sm'>Home</p>

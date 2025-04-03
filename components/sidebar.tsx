@@ -6,6 +6,7 @@ import Link from "next/link";
 import { cn} from "@/app/lib/utils";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import Logo from "./logo";
 
 
 const Sidebar =  ({session}: {session: Session}) => {
@@ -14,16 +15,7 @@ const Sidebar =  ({session}: {session: Session}) => {
   return (
     <div className=" sticky left-0 top-0 flex h-dvh flex-col justify-between bg-white px-5 pb-5 pt-10;">
       <div>
-        <div className="flex flex-row items-center gap-2 border-b border-dashed border-primary-admin/20 pb-10 max-md:justify-center">
-          <Image
-            src="/logo.png"
-            alt="logo"
-            height={50}
-            width={150}
-          />
-          <h1>Mchango App</h1>
-        </div>
-
+        <Logo/>
         <div className="mt-10 flex flex-col gap-5">
           {sideBarLinks.map((link) => {
             const isSelected =
