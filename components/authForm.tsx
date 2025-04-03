@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation"
 
 
 const authFormSchema = (type: FormType) => {
-  const mobileSchema = z.string().regex(/^0\d{9}$/, "Mobile number must have 10 digits and start with 0");
+  // const mobileSchema = z.string().regex(/^0\d{9}$/, "Mobile number must have 10 digits and start with 0");
   
   const passwordSchema = z.string()
   .min(6, {message: "Password must be at least 6 characters long"})
@@ -29,9 +29,9 @@ const authFormSchema = (type: FormType) => {
     firstname: type === 'sign-up' ? z.string().min(3) : z.string().optional(),
     lastname: type === 'sign-up' ? z.string().min(3) : z.string().optional(),
     code: type === 'sign-up' ? z.string().min(4).max(4) : z.string().min(4).max(4).optional(),
-    mobile: type === 'sign-up' ? mobileSchema : mobileSchema.optional(),
+    mobile: type === 'sign-up' ? z.string().min(4).max(4) : z.string().min(4).max(4).optional(),
     email: z.string().email(),
-    password: passwordSchema  
+    password: passwordSchema
   })
 }
 
@@ -81,15 +81,15 @@ const AuthForm = ({ type }: { type: FormType }) => {
   const isSignIn = type === 'sign-in'
 
   return (
-    <div className="card-border lg:min-w-[566px]">
-      <div className="flex justify-center space-x-1">
-        <h1 className="text-blueberry text-center text-2xl">Mchango App</h1>
-      </div>
+    <div className="lg:min-w-[566px]">
 
-      <div className="flex flex-col gap-6 card py-12 px-10">
+      <div className="flex flex-col gap-6 card py-8 px-10 border rounded-lg">
+        <div className="flex justify-center space-x-1">
+          <h1 className="text-blueberry text-center text-2xl">Mchango App</h1>
+        </div>        
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="w-full space-y-6 mt-4 form">
-              {isSignIn && (
+              {!isSignIn && (
                 <div className="flex flex-col space-y-6">
                   <div className="flex justify-between space-x-2">                
                     <FormField control={form.control} name='firstname' label='First Name' placeholder=""/>
