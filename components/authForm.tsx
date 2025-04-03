@@ -12,6 +12,7 @@ import FormField from "@/components/FormField"
 import CustomSelect from "./customSelect"
 import { countryCodes } from "@/constants"
 import { signInUser } from "@/actions/auth.actions"
+import { useRouter } from "next/navigation"
 
 
 const authFormSchema = (type: FormType) => {
@@ -27,7 +28,7 @@ const authFormSchema = (type: FormType) => {
   return z.object({
     firstname: type === 'sign-up' ? z.string().min(3) : z.string().optional(),
     lastname: type === 'sign-up' ? z.string().min(3) : z.string().optional(),
-    code: type === 'sign-up' ? z.string().min(4).max(4) : z.string().optional(),
+    code: type === 'sign-up' ? z.string().min(4).max(4) : z.string().min(4).max(4).optional(),
     mobile: type === 'sign-up' ? mobileSchema : mobileSchema.optional(),
     email: z.string().email(),
     password: passwordSchema  
@@ -35,6 +36,7 @@ const authFormSchema = (type: FormType) => {
 }
 
 const AuthForm = ({ type }: { type: FormType }) => {
+  const router = useRouter()
   const formSchema = authFormSchema(type)
 
   // 1. Define your form.
@@ -43,7 +45,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
     defaultValues: {
       firstname: "",
       lastname: "",
-      code: "+255",
+      code: "",
       mobile: "",
       email: "",
       password: ""
@@ -54,21 +56,19 @@ const AuthForm = ({ type }: { type: FormType }) => {
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       if(type === 'sign-up'){
+        toast.success('Account Created Successfully')
+        router.push('/sign-in')
         console.log('SIGN UP',values)
       }else{
         console.log('SIGN IN', values)
-        toast("Couldn't Login", {
-          description: `Testing`,
-          action: {
-            label: "Undo",
-            onClick: () => console.log("Undo"),
-          },
-        })        
+        toast.success('Login Successfully')
+        router.push('/home')       
         await signInUser(values);
       }
     } catch (error) {
       console.log(error)
       toast("Couldn't Login", {
+        variant: "destructive",
         description: `${error}`,
         action: {
           label: "Undo",
@@ -89,7 +89,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
       <div className="flex flex-col gap-6 card py-12 px-10">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="w-full space-y-6 mt-4 form">
-              {!isSignIn && (
+              {isSignIn && (
                 <div className="flex flex-col space-y-6">
                   <div className="flex justify-between space-x-2">                
                     <FormField control={form.control} name='firstname' label='First Name' placeholder=""/>
