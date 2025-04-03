@@ -11,7 +11,7 @@ import {toast} from "sonner"
 import FormField from "@/components/FormField"
 import CustomSelect from "./customSelect"
 import { countryCodes } from "@/constants"
-import { signInUser, signUpUser } from "@/actions/auth.actions"
+import { signInUser, signUpUser } from "@/app/actions/auth.actions"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 

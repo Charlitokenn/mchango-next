@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { sideBarLinks } from "@/constants";
 import Link from "next/link";
-import { cn} from "@/lib/utils";
+import { cn} from "@/app/lib/utils";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 

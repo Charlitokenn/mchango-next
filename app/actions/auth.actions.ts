@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 import { createClient } from '@/utils/supabase/server'
-import { capitalizeText } from '@/lib/utils'
+import { capitalizeText } from '@/app/lib/utils'
 
 export const signInUser = async (values: SignInParams) => {
   const supabase = await createClient()

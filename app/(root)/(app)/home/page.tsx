@@ -1,6 +1,6 @@
 'use client'
 
-import { signOutUser } from "@/actions/auth.actions"
+import { signOutUser } from "@/app/actions/auth.actions"
 import { Button } from "@/components/ui/button"
 
 const Home = () => {
