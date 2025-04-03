@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation"
 
 
 const authFormSchema = (type: FormType) => {
-  // const mobileSchema = z.string().regex(/^0\d{9}$/, "Mobile number must have 10 digits and start with 0");
+  const mobileSchema = z.string().regex(/^0\d{9}$/, "Mobile number must have 10 digits and start with 0");
   
   const passwordSchema = z.string()
   .min(6, {message: "Password must be at least 6 characters long"})
@@ -28,8 +28,8 @@ const authFormSchema = (type: FormType) => {
   return z.object({
     firstname: type === 'sign-up' ? z.string().min(3) : z.string().optional(),
     lastname: type === 'sign-up' ? z.string().min(3) : z.string().optional(),
-    code: type === 'sign-up' ? z.string().min(4).max(4) : z.string().min(4).max(4).optional(),
-    mobile: type === 'sign-up' ? z.string().min(4).max(4) : z.string().min(4).max(4).optional(),
+    code: type === 'sign-up' ? z.string().min(4).max(4) : z.string().optional(),
+    mobile: type === 'sign-up' ? mobileSchema : z.string().optional(),
     email: z.string().email(),
     password: passwordSchema
   })
@@ -55,21 +55,36 @@ const AuthForm = ({ type }: { type: FormType }) => {
   // 2. Define a submit handler.
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      if(type === 'sign-up'){
+      if (type === 'sign-up') {
         toast.success('Account Created Successfully')
         router.push('/sign-in')
         console.log('SIGN UP',values)
-      }else{
-        console.log('SIGN IN', values)
-        toast.success('Login Successfully')
-        router.push('/home')       
-        await signInUser(values);
+      } else {
+        const response = await signInUser(values);
+
+        if(response?.error) {
+          toast.error(response.message, {
+            description: `Failed to log into account. Please try again.`,
+            // action: {
+            //   label: "Undo",
+            //   onClick: () => console.log("Undo"),
+            // },
+          })
+          return
+        } else {
+          const email = response.data?.user.email
+          const firstname = response.data?.user.user_metadata.firstName
+
+          toast.success("Login Successfull", { 
+            description: `Welcome back ${!firstname ? email : firstname}`,
+          })
+          router.push('/home')
+        }
       }
     } catch (error) {
       console.log(error)
       toast("Couldn't Login", {
-        variant: "destructive",
-        description: `${error}`,
+        description: `Failed to log into account. Please try again.`,
         action: {
           label: "Undo",
           onClick: () => console.log("Undo"),
@@ -92,8 +107,8 @@ const AuthForm = ({ type }: { type: FormType }) => {
               {!isSignIn && (
                 <div className="flex flex-col space-y-6">
                   <div className="flex justify-between space-x-2">                
-                    <FormField control={form.control} name='firstname' label='First Name' placeholder=""/>
-                    <FormField control={form.control} name='lastname' label='Last Name' placeholder=""/>
+                    <FormField control={form.control} name='firstname' label='First Name' placeholder="First Name"/>
+                    <FormField control={form.control} name='lastname' label='Last Name' placeholder="Last Name"/>
                   </div>
                   <div className="flex -space-x-0.5">
                     <CustomSelect 
@@ -104,7 +119,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
                       placeholder="Select Country"
                       options={countryCodes}
                     />
-                    <FormField classname="rounded-l mt-3.5" control={form.control} name='mobile' label='' placeholder=""/>
+                    <FormField classname="rounded-l mt-3.5" control={form.control} name='mobile' label='' placeholder="e.g 0712555888"/>
                   </div>                  
                   </div>             
                 )

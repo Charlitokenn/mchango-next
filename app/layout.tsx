@@ -27,9 +27,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${ibmPlexSerif.variable}`}>
+      <body className={`${inter.variable} ${ibmPlexSerif.variable} relative`}>
         {children}
-        <Toaster/>
+        <Toaster position="top-right"/>
       </body>
     </html>
   );

@@ -8,14 +8,21 @@ import { createClient } from '@/utils/supabase/server'
 export const signInUser = async (values: SignInParams) => {
   const supabase = await createClient()
 
-  const { error } = await supabase.auth.signInWithPassword(values)
+  const { data, error } = await supabase.auth.signInWithPassword(values)
 
-  if (error) {
-    redirect('/error')
+  if (error) {    
+    return {
+      code: error.code,
+      message: error.message,
+      error: true,
+    }
+  } else {    
+    // revalidatePath('/home', 'layout')
+    return {
+      data: data,
+      error: false,
+    }
   }
-
-  revalidatePath('/home', 'layout')
-  redirect('/home')
 }
 
 export const signUpUser = async (values: SignUpParams) => {

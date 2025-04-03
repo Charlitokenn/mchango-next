@@ -108,9 +108,11 @@ const Header = () => {
               Pricing
             </a>
             <div className="flex flex-col space-y-3 pt-2">
-              <Button variant="outline" className="w-full rounded-full border-brand-400 text-brand-600 hover:bg-brand-50">
-                Login
-              </Button>
+              <Link href="/sign-in" className='cursor-pointer'>
+                <Button variant="outline" className="w-full rounded-full border-brand-400 text-brand-600 hover:bg-brand-50">
+                  Login
+                </Button>
+              </Link>
               <Button className="w-full rounded-full btn-gradient">
                 Start Free Trial
               </Button>
