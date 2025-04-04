@@ -3,15 +3,14 @@
 import Image from "next/image";
 import { sideBarLinks } from "@/constants";
 import Link from "next/link";
-import { cn} from "@/app/lib/utils";
+import { cn, getInitials} from "@/app/lib/utils";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Logo from "./logo";
 
-
-const Sidebar =  ({session}: {session: Session}) => {
+const Sidebar =  ({session}: {session: userProfile}) => {
   const pathname = usePathname();
-  
+console.log(session)
   return (
     <div className=" sticky left-0 top-0 flex h-dvh flex-col justify-between bg-white px-5 pb-5 pt-10;">
       <div>
@@ -51,16 +50,16 @@ const Sidebar =  ({session}: {session: Session}) => {
         </div>
       </div>
 
-      <div className="my-8 flex w-full flex-row gap-2 rounded-full border border-light-400 px-6 py-2 shadow-sm max-md:px-2">
+      <div className="my-8 flex w-full flex-row gap-2 items-center rounded-2xl border border-light-400 px-6 py-2 shadow-sm max-md:px-2">
         <Avatar>
           <AvatarFallback className="bg-amber-100">
-            {"IN"}
+            {getInitials(session?.data.firstName)}{getInitials(session?.data.lastName)}
           </AvatarFallback>
         </Avatar>
 
         <div className="flex flex-col max-md:hidden">
-          <p className="font-semibold text-dark-200">{session?.email}</p>
-          <p className="text-xs text-light-500">{}</p>
+          <p className="font-semibold text-dark-200">{session?.data.firstName} {session?.data.lastName}</p>
+          <p className="text-xs text-light-500">{session?.data.email}</p>
         </div>
       </div>
     </div>

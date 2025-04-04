@@ -1,12 +1,4 @@
-// /* eslint-disable no-unused-vars */
-
-// declare type SearchParamProps = {
-//     params: { [key: string]: string };
-//     searchParams: { [key: string]: string | string[] | undefined };
-//   };
-  
-//   // ========================================
-  
+// This file contains type definitions for the application.  
   declare type SignInParams = {
     email: string;
     password: string;
@@ -19,8 +11,23 @@
     mobile: string;
     email: string;
     password: string;
+  }; 
+
+  declare type userProfile = {
+    data: {
+      id: string;
+      email: string;
+      firstName: string;
+      lastName: string;
+      mobile: string;
+      smsBalance: number | null;
+      onBoarding: boolean;
+      currentEvent: string | null;
+      countryCode: string;
+    };
+    error: boolean;
   };  
-  
+
 //   declare type LoginUser = {
 //     email: string;
 //     password: string;

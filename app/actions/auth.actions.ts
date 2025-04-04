@@ -100,3 +100,31 @@ export const signOutUser = async () => {
   redirect('/sign-in')  
 }
 
+export const getUserProfile = async () => {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase.auth.getUser()
+
+  const userId = data.user?.id
+
+  // Get the user profile from the 'profiles' table
+  const { data: userProfile } = await supabase
+    .from('profiles')
+    .select('*') 
+    .eq('id', userId)
+    .single()
+  
+  if (error) {
+    return {
+      code: error.code,
+      message: error.message,
+      error: true,
+    }
+  } else {
+    return {
+      data: userProfile,
+      error: false,
+    }
+  }
+}
+
